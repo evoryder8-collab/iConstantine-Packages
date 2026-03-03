@@ -213,6 +213,22 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
 .modal-btn-upgrade:hover{background:rgba(200,169,81,0.08);border-color:rgba(200,169,81,0.65);color:var(--gold);transform:translateY(-1px);}
 .modal-upgrade-note{font-size:10px;color:rgba(255,255,255,0.2);text-align:center;letter-spacing:0.04em;margin:0 !important;}
 
+
+/* SITE LOGO */
+.site-logo-wrap { display:flex; justify-content:center; padding:52px 24px 0; position:relative; z-index:1; }
+#siteLogo { transition:transform 0.45s cubic-bezier(0.16,1,0.3,1); filter:drop-shadow(0 0 22px rgba(200,169,81,0.28)); will-change:transform; cursor:default; user-select:none; }
+@media (max-width:480px) { .site-logo-wrap { padding-top:36px; } }
+
+/* OPERATING CONDITIONS in modal */
+.modal-conditions { padding:22px 28px 8px; border-top:1px solid var(--border-subtle); }
+.cond-heading { font-size:9px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold-dim); margin-bottom:15px; }
+.cond-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px 20px; }
+@media (max-width:580px) { .cond-grid { grid-template-columns:1fr; } }
+.cond-title { font-size:10.5px; font-weight:600; letter-spacing:0.4px; color:var(--text-secondary); display:block; margin-bottom:4px; }
+.cond-item p { font-size:11.5px; font-weight:300; color:var(--text-muted); line-height:1.62; }
+
+/* LEGAL FOOTER */
+.legal-footer { text-align:center; padding:10px 24px 28px; font-size:11px; font-weight:300; letter-spacing:0.4px; color:var(--text-muted); opacity:0.65; position:relative; z-index:1; }
 </style>
 </head>
 <body>
@@ -527,7 +543,6 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
 <!-- FOOTER NOTES -->
 <div class="footer-notes">
   <p><span class="highlight">Book in advance</span> for best possible coverage. Payment must be received before the event. I cannot apply priority coverage retroactively.</p>
-  <p>A written agreement with expectations and package features will be provided for mutual signatures.</p>
   <p>All packages include a <span class="highlight">Personal Commercial License</span> to advertise yourself, your brand, and your private practice freely.</p>
 </div>
 <div class="brand-footer">
@@ -584,8 +599,8 @@ setTimeout(function() {
 var _mPayUrl = '';
 var _mUpgradeUrl = '';
 var _upgrades = {
-  'starter':  { url:'https://pay.sumup.com/b2c/Q4RDEQV9', label:'🎬 ▯+▭  Include 4K Landscape Upgrade', addPrice:99,  total:289 },
-  'essential':{ url:'https://pay.sumup.com/b2c/QW3RQ80I', label:'💆🏻‍♀️💄  Include Professional Retouching', addPrice:119, total:409 }
+  'starter':  { url:'https://pay.sumup.com/b2c/QZC1NRAK', label:'▯+▭  Include 4K Landscape Upgrade', addPrice:99,  total:289 },
+  'essential':{ url:'https://pay.sumup.com/b2c/QFHCYD1N', label:'💆🏻‍♀️💄  Include Professional Retouching', addPrice:119, total:409 }
 };
 function openPkgModal(tier, payUrl) {
   _mPayUrl = payUrl;
@@ -638,6 +653,38 @@ function handleOverlayClick(e) {
 }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 
+// Logo gyroscope + mouse parallax
+(function(){
+  var logo = document.getElementById('siteLogo');
+  if (!logo) return;
+  var tx = 0, ty = 0, supportsGyro = false;
+  function applyTilt() {
+    logo.style.transform = 'translateX(' + (tx*11).toFixed(1) + 'px) translateY(' + (ty*11).toFixed(1) + 'px)';
+  }
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(e) {
+      if (e.gamma !== null) {
+        supportsGyro = true;
+        tx = Math.max(-1, Math.min(1, e.gamma / 28));
+        ty = Math.max(-1, Math.min(1, ((e.beta || 45) - 45) / 28));
+        applyTilt();
+      }
+    }, false);
+  }
+  document.addEventListener('mousemove', function(e) {
+    if (supportsGyro) return;
+    tx = ((e.clientX / window.innerWidth) - 0.5) * 2;
+    ty = ((e.clientY / window.innerHeight) - 0.5) * 2;
+    applyTilt();
+  });
+  window.addEventListener('deviceorientation', function perm() {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().catch(function(){});
+    }
+    window.removeEventListener('deviceorientation', perm);
+  }, { once: true });
+})();
+
 </script>
 
 <!-- PACKAGE AGREEMENT MODAL -->
@@ -655,6 +702,27 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModa
       <p>Review your full package scope &nbsp;·&nbsp; clicking &ldquo;I Agree&rdquo; confirms you understand what is included</p>
     </div>
     <div class="modal-body" id="mBody"></div>
+    <div class="modal-conditions">
+      <p class="cond-heading">Operating Conditions</p>
+      <div class="cond-grid">
+        <div class="cond-item">
+          <span class="cond-title">Priority Allocation</span>
+          <p>Booking tier determines coverage priority. Higher tiers receive preferred positioning during peak moments. Starter &amp; Essential clients may receive reduced coverage when higher-tier commitments overlap.</p>
+        </div>
+        <div class="cond-item">
+          <span class="cond-title">Coverage Frequency</span>
+          <p>Events are dynamic and unpredictable. Specific shots, moments, or minimum photo counts cannot be guaranteed unless explicitly stated in your package details.</p>
+        </div>
+        <div class="cond-item">
+          <span class="cond-title">Creative Autonomy</span>
+          <p>All creative decisions &mdash; framing, editing style, color grading, narrative &mdash; are mine. Shot lists are accommodated only where explicitly permitted in your selected package.</p>
+        </div>
+        <div class="cond-item">
+          <span class="cond-title">Live Event Conditions</span>
+          <p>Coverage may be affected by venue restrictions, lighting, access limitations, or organizer constraints beyond my control. I deliver the best possible result within the conditions of the environment.</p>
+        </div>
+      </div>
+    </div>
     <div class="modal-footer">
       <button class="modal-btn-agree" id="mBtnAgree" onclick="modalAgree()">&#10003;&nbsp;&nbsp;I Agree &mdash; Proceed to Payment</button>
       <div id="mUpgradeRow" class="modal-upgrade-row" style="display:none;">
@@ -666,5 +734,9 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModa
   </div>
 </div>
 
+
+<div class="legal-footer">
+  <p>iConstantine / Barbu Media Switzerland &nbsp;&nbsp;|&nbsp;&nbsp; All rights reserved &mdash; &copy; 2026</p>
+</div>
 </body>
 </html>
