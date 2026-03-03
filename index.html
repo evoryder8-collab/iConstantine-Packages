@@ -207,6 +207,10 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
 .modal-btn-agree:active{transform:translateY(0);}
 .modal-btn-back{width:100%;padding:14px 24px;border-radius:14px;cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;background:transparent;border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.35);transition:all 0.3s ease;}
 .modal-btn-back:hover{border-color:rgba(255,255,255,0.18);color:rgba(255,255,255,0.6);}
+.modal-upgrade-row{display:flex;flex-direction:column;gap:5px;}
+.modal-btn-upgrade{width:100%;padding:15px 24px;border-radius:14px;cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;background:transparent;border:1.5px solid rgba(200,169,81,0.38);color:rgba(200,169,81,0.82);transition:all 0.32s var(--ease);}
+.modal-btn-upgrade:hover{background:rgba(200,169,81,0.08);border-color:rgba(200,169,81,0.65);color:var(--gold);transform:translateY(-1px);}
+.modal-upgrade-note{font-size:10px;color:rgba(255,255,255,0.2);text-align:center;letter-spacing:0.04em;margin:0 !important;}
 
 </style>
 </head>
@@ -577,6 +581,11 @@ setTimeout(function() {
 
 // ── Package Agreement Modal ──────────────────────────────────────────────────
 var _mPayUrl = '';
+var _mUpgradeUrl = '';
+var _upgrades = {
+  'starter':  { url:'https://pay.sumup.com/b2c/Q4RDEQV9', label:'\u2726 Include 4K Landscape Upgrade', addPrice:99,  total:289 },
+  'essential':{ url:'https://pay.sumup.com/b2c/QW3RQ80I', label:'\u2726 Include Professional Retouching', addPrice:119, total:409 }
+};
 function openPkgModal(tier, payUrl) {
   _mPayUrl = payUrl;
   var card = document.querySelector('.pkg-card[data-tier="' + tier + '"]');
@@ -587,6 +596,19 @@ function openPkgModal(tier, payUrl) {
   document.getElementById('mTierPrice').textContent = priceEl.textContent.trim();
   document.getElementById('mTagline').textContent = inner.querySelector('.pkg-tagline').textContent;
   document.getElementById('mBody').innerHTML = expandInner ? expandInner.innerHTML : '';
+  // Hide upgrade-note blocks — handled in footer
+  document.querySelectorAll('#mBody .upgrade-note').forEach(function(el){ el.style.display='none'; });
+  // Show / hide upgrade footer option
+  var upgradeRow = document.getElementById('mUpgradeRow');
+  var upgrade = _upgrades[tier];
+  if (upgrade) {
+    _mUpgradeUrl = upgrade.url;
+    document.getElementById('mBtnUpgrade').textContent = upgrade.label + '  ·  ' + upgrade.total + ' CHF total';
+    upgradeRow.style.display = '';
+  } else {
+    _mUpgradeUrl = '';
+    upgradeRow.style.display = 'none';
+  }
   var modal = document.getElementById('pkgModal');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -598,6 +620,11 @@ function closeModal() {
 }
 function modalAgree() {
   window.open(_mPayUrl, '_blank');
+  closeModal();
+}
+function modalAgreeWithUpgrade() {
+  window.open(_mPayUrl, '_blank');
+  setTimeout(function(){ window.open(_mUpgradeUrl, '_blank'); }, 500);
   closeModal();
 }
 function handleOverlayClick(e) {
@@ -624,6 +651,10 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModa
     <div class="modal-body" id="mBody"></div>
     <div class="modal-footer">
       <button class="modal-btn-agree" onclick="modalAgree()">&#10003;&nbsp;&nbsp;I Agree &mdash; Proceed to Payment</button>
+      <div id="mUpgradeRow" class="modal-upgrade-row" style="display:none;">
+        <button class="modal-btn-upgrade" id="mBtnUpgrade" onclick="modalAgreeWithUpgrade()"></button>
+        <p class="modal-upgrade-note">Two separate payment windows will open simultaneously</p>
+      </div>
       <button class="modal-btn-back" onclick="closeModal()">&#8592;&nbsp;&nbsp;Take Me Back to Packages</button>
     </div>
   </div>
