@@ -208,7 +208,8 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
 .modal-btn-back{width:100%;padding:14px 24px;border-radius:14px;cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;background:transparent;border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.35);transition:all 0.3s ease;}
 .modal-btn-back:hover{border-color:rgba(255,255,255,0.18);color:rgba(255,255,255,0.6);}
 .modal-upgrade-row{display:flex;flex-direction:column;gap:5px;}
-.modal-btn-upgrade{width:100%;padding:15px 24px;border-radius:14px;cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;background:transparent;border:1.5px solid rgba(200,169,81,0.38);color:rgba(200,169,81,0.82);transition:all 0.32s var(--ease);}
+.modal-btn-upgrade{position:relative;width:100%;padding:15px 24px;border-radius:14px;cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;background:transparent;border:1.5px solid rgba(200,169,81,0.38);color:rgba(200,169,81,0.82);transition:all 0.32s var(--ease);}
+.modal-btn-upgrade[data-spark]::after{content:attr(data-spark);position:absolute;top:7px;right:11px;font-size:9px;color:var(--gold);opacity:0.42;line-height:1;pointer-events:none;}
 .modal-btn-upgrade:hover{background:rgba(200,169,81,0.08);border-color:rgba(200,169,81,0.65);color:var(--gold);transform:translateY(-1px);}
 .modal-upgrade-note{font-size:10px;color:rgba(255,255,255,0.2);text-align:center;letter-spacing:0.04em;margin:0 !important;}
 
@@ -607,6 +608,8 @@ function openPkgModal(tier, payUrl) {
     _mUpgradeUrl = upgrade.url;
     var basePrice = upgrade.total - upgrade.addPrice;
     document.getElementById('mBtnUpgrade').textContent = upgrade.label + '  ·  ' + basePrice + ' + ' + upgrade.addPrice + ' = ' + upgrade.total + ' CHF';
+    if (tier === 'essential') { document.getElementById('mBtnUpgrade').setAttribute('data-spark','✦'); }
+    else { document.getElementById('mBtnUpgrade').removeAttribute('data-spark'); }
     upgradeRow.style.display = '';
   } else {
     _mUpgradeUrl = '';
