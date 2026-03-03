@@ -603,7 +603,8 @@ function openPkgModal(tier, payUrl) {
   var upgrade = _upgrades[tier];
   if (upgrade) {
     _mUpgradeUrl = upgrade.url;
-    document.getElementById('mBtnUpgrade').textContent = upgrade.label + '  ·  ' + upgrade.total + ' CHF total';
+    var basePrice = upgrade.total - upgrade.addPrice;
+    document.getElementById('mBtnUpgrade').textContent = upgrade.label + '  ·  ' + basePrice + ' + ' + upgrade.addPrice + ' = ' + upgrade.total + ' CHF';
     upgradeRow.style.display = '';
   } else {
     _mUpgradeUrl = '';
