@@ -593,7 +593,9 @@ function openPkgModal(tier, payUrl) {
   var expandInner = card.querySelector('.pkg-expand-inner');
   document.getElementById('mTierName').textContent = inner.querySelector('.pkg-tier-name').textContent;
   var priceEl = inner.querySelector('.pkg-price');
+  var priceStr = priceEl.childNodes[0].nodeValue.trim() + ' CHF';
   document.getElementById('mTierPrice').textContent = priceEl.textContent.trim();
+  document.getElementById('mBtnAgree').textContent = '\u2713\u00a0\u00a0I Agree \u2014 ' + priceStr;
   document.getElementById('mTagline').textContent = inner.querySelector('.pkg-tagline').textContent;
   document.getElementById('mBody').innerHTML = expandInner ? expandInner.innerHTML : '';
   // Hide upgrade-note blocks — handled in footer
@@ -651,7 +653,7 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModa
     </div>
     <div class="modal-body" id="mBody"></div>
     <div class="modal-footer">
-      <button class="modal-btn-agree" onclick="modalAgree()">&#10003;&nbsp;&nbsp;I Agree &mdash; Proceed to Payment</button>
+      <button class="modal-btn-agree" id="mBtnAgree" onclick="modalAgree()">&#10003;&nbsp;&nbsp;I Agree &mdash; Proceed to Payment</button>
       <div id="mUpgradeRow" class="modal-upgrade-row" style="display:none;">
         <button class="modal-btn-upgrade" id="mBtnUpgrade" onclick="modalAgreeWithUpgrade()"></button>
         <p class="modal-upgrade-note">Two separate payment windows will open simultaneously</p>
