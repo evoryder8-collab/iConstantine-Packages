@@ -238,6 +238,9 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
 <div class="orb orb-3"></div>
 <div class="orb orb-4"></div>
 <div class="orb orb-5"></div>
+<div class="site-logo-wrap">
+  <img id="siteLogo" src="" alt="iCONSTANTINE" width="120" height="120" style="border-radius:50%;display:none;">
+</div>
 <section class="hero">
   <p class="hero-brand">iConstantine</p>
   <h1>Championship <em>Media</em></h1>
@@ -644,8 +647,7 @@ function modalAgree() {
   closeModal();
 }
 function modalAgreeWithUpgrade() {
-  window.open(_mPayUrl, '_blank');
-  setTimeout(function(){ window.open(_mUpgradeUrl, '_blank'); }, 500);
+  window.open(_mUpgradeUrl, '_blank');
   closeModal();
 }
 function handleOverlayClick(e) {
@@ -727,7 +729,7 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModa
       <button class="modal-btn-agree" id="mBtnAgree" onclick="modalAgree()">&#10003;&nbsp;&nbsp;I Agree &mdash; Proceed to Payment</button>
       <div id="mUpgradeRow" class="modal-upgrade-row" style="display:none;">
         <button class="modal-btn-upgrade" id="mBtnUpgrade" onclick="modalAgreeWithUpgrade()"></button>
-        <p class="modal-upgrade-note">Two separate payment windows will open simultaneously</p>
+        
       </div>
       <button class="modal-btn-back" onclick="closeModal()">&#8592;&nbsp;&nbsp;Take Me Back to Packages</button>
     </div>
