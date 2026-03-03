@@ -176,6 +176,38 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
   .pkg-inner { padding:28px 20px 20px; }
   .packages { gap:16px; padding:0 20px 60px; }
 }
+
+/* ── PACKAGE AGREEMENT MODAL ───────────────────────────────────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(4,6,16,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px;box-sizing:border-box;}
+.modal-overlay.open{display:flex;animation:mFadeIn 0.38s var(--ease);}
+@keyframes mFadeIn{from{opacity:0;transform:scale(0.95) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-card{position:relative;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;border-radius:26px;background:rgba(8,11,26,0.96);border:1px solid rgba(255,255,255,0.09);box-shadow:0 40px 100px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.03),inset 0 1px 0 rgba(255,255,255,0.07);scrollbar-width:thin;scrollbar-color:rgba(200,169,81,0.25) transparent;}
+.modal-card::-webkit-scrollbar{width:3px;}.modal-card::-webkit-scrollbar-thumb{background:rgba(200,169,81,0.2);border-radius:3px;}
+.modal-close-x{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,0.4);transition:all 0.2s ease;z-index:2;line-height:1;}
+.modal-close-x:hover{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);}
+.modal-header{padding:36px 36px 24px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.modal-tier-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.modal-tier-name{font-family:var(--font-display);font-size:30px;font-weight:500;color:var(--text-primary);letter-spacing:0.02em;}
+.modal-tier-price{font-family:var(--font-body);font-size:20px;font-weight:700;color:var(--gold-light);letter-spacing:-0.01em;white-space:nowrap;}
+.modal-tagline{font-family:var(--font-body);font-size:13px;color:var(--text-secondary);line-height:1.65;opacity:0.8;}
+.modal-notice{margin:20px 36px 0;padding:12px 18px;background:rgba(200,169,81,0.06);border:1px solid rgba(200,169,81,0.18);border-radius:12px;text-align:center;}
+.modal-notice p{font-family:var(--font-body);font-size:10.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(200,169,81,0.75);margin:0;}
+.modal-body{padding:28px 36px 12px;}
+.modal-body h4{font-family:var(--font-display);font-size:18px;font-weight:400;color:var(--text-primary);margin:0 0 22px;letter-spacing:0.02em;}
+.modal-body .detail-block{margin-bottom:22px;}
+.modal-body .detail-label{display:block;font-family:var(--font-body);font-size:9.5px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
+.modal-body p{font-family:var(--font-body);font-size:13px;color:rgba(210,215,230,0.75);line-height:1.75;margin:0 0 6px;}
+.modal-body ul{padding-left:18px;margin:8px 0;}
+.modal-body li{font-family:var(--font-body);font-size:13px;color:rgba(210,215,230,0.75);line-height:1.75;margin-bottom:4px;}
+.modal-body .upgrade-note{background:rgba(200,169,81,0.05);border:1px solid rgba(200,169,81,0.12);border-radius:12px;padding:14px 16px;margin-top:14px;}
+.modal-body .upgrade-note a,.modal-body .upgrade-note p{font-size:12px;color:rgba(200,169,81,0.7);text-decoration:none;}
+.modal-footer{position:sticky;bottom:0;padding:16px 36px 32px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(to top,rgba(8,11,26,1) 55%,transparent 100%);}
+.modal-btn-agree{width:100%;padding:17px 24px;border-radius:14px;border:none;cursor:pointer;font-family:var(--font-body);font-size:11.5px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;background:linear-gradient(135deg,var(--gold) 0%,var(--gold-light) 100%);color:var(--navy);transition:all 0.35s var(--ease);box-shadow:0 6px 24px rgba(200,169,81,0.3);}
+.modal-btn-agree:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(200,169,81,0.45);}
+.modal-btn-agree:active{transform:translateY(0);}
+.modal-btn-back{width:100%;padding:14px 24px;border-radius:14px;cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;background:transparent;border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.35);transition:all 0.3s ease;}
+.modal-btn-back:hover{border-color:rgba(255,255,255,0.18);color:rgba(255,255,255,0.6);}
+
 </style>
 </head>
 <body>
@@ -219,7 +251,7 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
         <li>Personal commercial license</li>
       </ul>
       <div class="pkg-actions">
-        <a href="https://pay.sumup.com/b2c/QDMH0DTJ" target="_blank" class="btn-book">Book Now</a>
+        <a href="#" class="btn-book" onclick="openPkgModal('starter','https://pay.sumup.com/b2c/QDMH0DTJ');return false;">Book Now</a>
         <button class="btn-details" onclick="toggleDetails(this)">More Info ▾</button>
       </div>
     </div>
@@ -261,7 +293,7 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
         <li>Personal commercial license</li>
       </ul>
       <div class="pkg-actions">
-        <a href="https://pay.sumup.com/b2c/QW69T1XC" target="_blank" class="btn-book">Book Now</a>
+        <a href="#" class="btn-book" onclick="openPkgModal('essential','https://pay.sumup.com/b2c/QW69T1XC');return false;">Book Now</a>
         <button class="btn-details" onclick="toggleDetails(this)">More Info ▾</button>
       </div>
     </div>
@@ -308,7 +340,7 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
         <li>Cheaper than buying separately</li>
       </ul>
       <div class="pkg-actions">
-        <a href="https://pay.sumup.com/b2c/QSKMKPRP" target="_blank" class="btn-book">Book Now</a>
+        <a href="#" class="btn-book" onclick="openPkgModal('authority','https://pay.sumup.com/b2c/QSKMKPRP');return false;">Book Now</a>
         <button class="btn-details" onclick="toggleDetails(this)">More Info ▾</button>
       </div>
     </div>
@@ -354,7 +386,7 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
         <li>2 revision rounds included</li>
       </ul>
       <div class="pkg-actions">
-        <a href="https://pay.sumup.com/b2c/Q46P53HL" target="_blank" class="btn-book">Book Now</a>
+        <a href="#" class="btn-book" onclick="openPkgModal('showcase','https://pay.sumup.com/b2c/Q46P53HL');return false;">Book Now</a>
         <button class="btn-details" onclick="toggleDetails(this)">More Info ▾</button>
       </div>
     </div>
@@ -401,7 +433,7 @@ body::after { content:''; position:fixed; bottom:-20%; right:20%; width:50%; hei
         <li>2 revision rounds included</li>
       </ul>
       <div class="pkg-actions">
-        <a href="https://pay.sumup.com/b2c/QS78NMBG" target="_blank" class="btn-book">Book Now</a>
+        <a href="#" class="btn-book" onclick="openPkgModal('signature','https://pay.sumup.com/b2c/QS78NMBG');return false;">Book Now</a>
         <button class="btn-details" onclick="toggleDetails(this)">More Info ▾</button>
       </div>
     </div>
@@ -542,6 +574,60 @@ setTimeout(function() {
   var fill = document.querySelector('.capacity-fill');
   if (fill) fill.style.width = '30%';
 }, 800);
+
+// ── Package Agreement Modal ──────────────────────────────────────────────────
+var _mPayUrl = '';
+function openPkgModal(tier, payUrl) {
+  _mPayUrl = payUrl;
+  var card = document.querySelector('.pkg-card[data-tier="' + tier + '"]');
+  var inner = card.querySelector('.pkg-inner');
+  var expandInner = card.querySelector('.pkg-expand-inner');
+  document.getElementById('mTierName').textContent = inner.querySelector('.pkg-tier-name').textContent;
+  var priceEl = inner.querySelector('.pkg-price');
+  document.getElementById('mTierPrice').textContent = priceEl.textContent.trim();
+  document.getElementById('mTagline').textContent = inner.querySelector('.pkg-tagline').textContent;
+  document.getElementById('mBody').innerHTML = expandInner ? expandInner.innerHTML : '';
+  var modal = document.getElementById('pkgModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modal.querySelector('.modal-card').scrollTop = 0;
+}
+function closeModal() {
+  document.getElementById('pkgModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function modalAgree() {
+  window.open(_mPayUrl, '_blank');
+  closeModal();
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('pkgModal')) closeModal();
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
 </script>
+
+<!-- PACKAGE AGREEMENT MODAL -->
+<div id="pkgModal" class="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal-card">
+    <button class="modal-close-x" onclick="closeModal()" aria-label="Close">&#x2715;</button>
+    <div class="modal-header">
+      <div class="modal-tier-row">
+        <span class="modal-tier-name" id="mTierName"></span>
+        <span class="modal-tier-price" id="mTierPrice"></span>
+      </div>
+      <p class="modal-tagline" id="mTagline"></p>
+    </div>
+    <div class="modal-notice">
+      <p>Review your full package scope &nbsp;·&nbsp; clicking &ldquo;I Agree&rdquo; confirms you understand what is included</p>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-footer">
+      <button class="modal-btn-agree" onclick="modalAgree()">&#10003;&nbsp;&nbsp;I Agree &mdash; Proceed to Payment</button>
+      <button class="modal-btn-back" onclick="closeModal()">&#8592;&nbsp;&nbsp;Take Me Back to Packages</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
